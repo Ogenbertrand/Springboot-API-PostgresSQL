@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres_db:
+    image: postgres:latest
+    container_name: API-container
+    restart: always
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5434:5432'
+    volumes:
+      - postgres_db:/var/lib/postgresql/data
+volumes:
+  postgres_db:
+    driver: local
