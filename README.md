@@ -1,6 +1,6 @@
 ## Spring Boot API with PostgresSQL  Database 👨🏽‍💻🚀🇨🇲
-Visit link to know more about the tools [link](https://www.postgresql.org/docs/current/
-https://spring.io/guides/gs/spring-boot)
+Visit [link](https://www.postgresql.org/docs/current/, 
+https://spring.io/guides/gs/spring-boot) to know more about postgres sb and spring boot...
 
 This repo is going to direct you with the steps on how to create a simple API with;
 
