@@ -8,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UsersController {
 
@@ -23,8 +25,8 @@ public class UsersController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Users> createUser(@Validated @RequestBody Users user) {
+    @PostMapping("/post")
+    public ResponseEntity<Users> createUser(@Valid @RequestBody Users user) {
         Users savedUser = usersService.saveUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
