@@ -1,6 +1,6 @@
 ## Spring Boot API with PostgresSQL  Database 👨🏽‍💻🚀🇨🇲
 Visit [link](https://www.postgresql.org/docs/current/, 
-https://spring.io/guides/gs/spring-boot) to know more about postgres sb and spring boot...
+https://spring.io/guides/gs/spring-boot, https://docs.docker.com/compose/gettingstarted/) to know more...
 
 This repo is going to direct you with the steps on how to create a simple API with;
 
@@ -63,26 +63,44 @@ spring:
 ```
 
 ⬇️⬇️
-3) If you decide to use Spring Security, navigate to your "src" folder and create the file 
+3) If you decide to use Spring Security, navigate to your "src" folder and create the class
 SecurityConfig.java and add
 ```
+    package com.Spring_API.demo.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
     @Bean
-    public SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/**").permitAll()
                 )
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults());
+                .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
+}
+
 ```
 
-⬇️⬇️
-4) Create your Entity, Controller, Repository, and Service class in your "src" folder;
 
-- Entity class add
+The SecurityFilterChain bean defines which URL paths should be secured and which should not. Specifically, the paths are configured to not require any authentication. All other paths must be authenticated.
+
+
+⬇️⬇️
+4) Create your Entity, Controller, Repository, and Service packages in your "src" folder;
+
+- Entity package add
 ```
 package com.Spring_API.demo.domain;
 
@@ -97,7 +115,7 @@ import lombok.Setter;
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Changed to Long, as it's a more common type for IDs
+    private Long id; 
     private String username;
     private String email;
     private String password;
@@ -112,7 +130,7 @@ public class Users {
 }
  @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Changed to Long, as it's a more common type for IDs
+    private Long id; 
     private String username;
     private String email;
     private String password;
@@ -128,7 +146,7 @@ public class Users {
 
 
 ⬇️⬇️
-- Controller class add
+- Controller package add
 ```
 package com.Spring_API.demo.controller;
 
@@ -171,7 +189,7 @@ public class UsersController {
 ```
 
 ⬇️⬇️
-- Repository class add 
+- Repository package add 
 ```
 package com.Spring_API.demo.repository;
 
@@ -185,7 +203,7 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 ```
 
 ⬇️⬇️
-- service class add;
+- service package add;
 ```
 package com.Spring_API.demo.service;
 
@@ -223,10 +241,6 @@ public class UsersService {
 ```
 
 
-
-
-
-
 Have you encountered errors like 😫😮‍💨 ?;
 ```
 FATAL: role "postgres" does not exist  ##user of your database
@@ -234,11 +248,9 @@ FATAL: role "postgres" does not exist  ##user of your database
 ```
 Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured
 ```
-```
- Unsatisfied dependency expressed through constructor parameter 0: Could not convert argument value of type [java.util.ArrayList] to required type [java.util.List]: Failed to convert value of type 'java.util.ArrayList' to required type 'java.util.List'; Cannot convert value of type 'org.springframework.security.web.DefaultSecurityFilterChain' to required type 'jakarta.servlet.Filter': no matching editors or conversion strategy found
-```
 
-### Don't bother 😁
+
+### Don't bother let me help😁
 
 - The error "postgres user does not exit" occur due to the fact that the port listed in your docker-compose.yaml file is conflicting with the installed version of postgres in your system.
 To fix it go the ports section in your docker-compose file change the ports;
@@ -249,13 +261,23 @@ e.g
   ```
 
 
+- The second error message you encounter indicates that spring boot is unable to configure datasource "url" because it could not find the drive class for PostgreSQL. To fix just make sure you use application.yml file to connect to your database don't change the name.
 
-- The second error message you encounter indicates that spring boot is unable to configure datasource "url" because it could not find the drive class for PostgreSQL. To fix just make you connecting database in an application.yml file don't change the name.
+### If you wish to clone the repo directly !,
 
+-  clone the repo with the command 
+```
+git clone git@github.com:Ogenbertrand/Springboot-API-PostgresSQL.git
+```
 
-
-- The third error message you're encountering suggests that Spring Security is expecting a List of filters (jakarta.servlet.Filter) for the springSecurityFilterChain, but it's receiving an ArrayList instead, which it cannot convert.
-
-
+- cd into the cloned folder 
+```angular2html
+cd Springboot-API-PostgresSQL
+```
+- You can run the application by using 
+```
+./gradlew bootRun
+```
+- Alternatively, you can build the JAR file by using "./gradlew build" and then run the JAR file, as follows:
 
 ## Follow all the above steps carefully and Thank me later!🥳
