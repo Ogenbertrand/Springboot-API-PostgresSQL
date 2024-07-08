@@ -2,7 +2,7 @@ version: '3.8'
 services:
   postgres_db:
     image: postgres:latest
-    container_name: API-container
+    container_name: postgres-container
     restart: always
     environment:
       - POSTGRES_DB=postgres
@@ -12,6 +12,20 @@ services:
       - '5434:5432'
     volumes:
       - postgres_db:/var/lib/postgresql/data
+
+  spring_app:
+    image: springboot-api-postgres
+    container_name: main-app-container
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    ports:
+      - '8081:8080'
+    depends_on:
+      - postgres_db
+
 volumes:
   postgres_db:
     driver: local
