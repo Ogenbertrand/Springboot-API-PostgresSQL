@@ -30,6 +30,3 @@ jobs:
 
       - name: Build command
         run: ./gradlew clean build
-
-      - name: Test command
-        run: ./gradlew test
