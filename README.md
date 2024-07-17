@@ -50,6 +50,8 @@ Run this command on your terminal to start your container, add option "-d" to ru
 docker-compsoe up -d
 ```
 ⬇️⬇️
+
+
 2) Connect your created database to your application. Navigate to your resource folder, in your;
 application.properties file add
 ```
@@ -74,6 +76,8 @@ spring:
 ```
 
 ⬇️⬇️
+
+
 3) Create your Entity, Controller, Repository, and Service packages in your "src" folder;
 
 - Entity package add
@@ -291,4 +295,4 @@ cd Springboot-API-PostgresSQL
 ```
 - Alternatively, you can build the JAR file by using "./gradlew build" and then run the JAR file, as follows:
 
-## Follow all the above steps carefully and Thank me later!🥳
+## Congratulation you just created your first API !🥳
