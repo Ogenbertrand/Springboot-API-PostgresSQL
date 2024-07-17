@@ -6,26 +6,26 @@ on:
       - "**"
     tags-ignore:
       - "v*"
-
   pull_request:
     branches:
       - "**"
+
 jobs:
   build:
-    name: Build and Test
+    name: Build
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:14-alpine
+        image: postgres:latest
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: testdb
+          POSTGRES_DB: demo
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: password
         options: >-
-          --health-cmd "pg_isready -U postgres"
+          --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -42,18 +42,16 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
-      - name: Wait for PostgreSQL
+      - name: Wait for Postgres
         run: |
-          while ! pg_isready -h localhost -p 5432 -U postgres; do
+          while ! pg_isready -h localhost -p 5432; do
+            echo "Waiting for postgres..."
             sleep 1
           done
 
-      - name: Build without Tests
-        run: ./gradlew clean build -x test
-
-      - name: Run Tests
-        run: ./gradlew test --info --stacktrace
+      - name: Run Build
         env:
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/testdb
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/demo
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: password
+        run: ./gradlew clean build
