@@ -55,3 +55,4 @@ jobs:
           SPRING_DATASOURCE_USERNAME: postgres
           SPRING_DATASOURCE_PASSWORD: password
         run: ./gradlew clean build
+
