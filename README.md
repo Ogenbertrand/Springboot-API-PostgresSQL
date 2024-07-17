@@ -9,42 +9,56 @@ This repo is going to direct you with the steps on how to create a simple API wi
 - docker-compose
 - gradle
 
+## Development Steps
+- Create Spring Boot Application https://start.spring.io/
+- Configure PostgreSQL Database
+- Connect your Sprinboot Application to your DB
+- Create your Entity 
+- Create your Repository 
+- Create your Service
+- Create your Controller
+- Test your API with Postman
+
+
 #### Ensure you follow all the steps below till the end !
 
 ### Steps
 
 1) Create your "docker-compose.yaml" file and insert the below code to create your database and container
 ```
-version: '3.8'
+version: '4.1'
 services:
   postgres_db:
     image: postgres:latest
-    container_name: API-container
     restart: always
     environment:
-      - POSTGRES_DB=postgres  ##select the one you want
-      - POSTGRES_USER=postgres  ##select the one you want
-      - POSTGRES_PASSWORD=password  ##select the one you want
+      - POSTGRES_DB=demo
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
     ports:
-      - '5432:5432'
+      - '5435:5432'
     volumes:
       - postgres_db:/var/lib/postgresql/data
+
 volumes:
-  postgres_db:
-    driver: local
+  postgres_db: { }
 ```
+The docker-compose file will pull the latest version of postgres from https://hub.docker.com/ and then start up a container.
+
 Run this command on your terminal to start your container, add option "-d" to run it in detach mode
 ```
 docker-compsoe up -d
 ```
 ⬇️⬇️
+
+
 2) Connect your created database to your application. Navigate to your resource folder, in your;
 application.properties file add
 ```
-spring.datasource.url=jdbc:postgresql://localhost:5432/postgres
-spring.datasource.username=postgres  ##select the one you want
-spring.datasource.password=password  ##select the one you want
-spring.jpa.hibernate.ddl-auto=create  ##select the one you want
+spring.datasource.url=jdbc:postgresql://localhost:5432/demo
+spring.datasource.username=postgres  ## select the one you want
+spring.datasource.password=password  ## select the one you want
+spring.jpa.hibernate.ddl-auto=create  ## select the one you want
 
 ```
 ### OR
@@ -52,53 +66,19 @@ application.yaml file add
 ```
 spring:
   datasource:
+    url: jdbc:postgresql://localhost:5435/demo ## select the one you want
+    username: postgres  ## select the one you want                     
+    password: password  ## select the one you want
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5434/postgres  ##select the one you want
-    username: postgres  ##select the one you want
-    password: password  ##select the one you want
-
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 ```
 
 ⬇️⬇️
-3) If you decide to use Spring Security, navigate to your "src" folder and create the class
-SecurityConfig.java and add
-```
-    package com.Spring_API.demo.config;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig {
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/**").permitAll()
-                )
-                .csrf(AbstractHttpConfigurer::disable);
-        return http.build();
-    }
-
-}
-
-```
 
 
-The SecurityFilterChain bean defines which URL paths should be secured and which should not. Specifically, the paths are configured to not require any authentication. All other paths must be authenticated.
-
-
-⬇️⬇️
-4) Create your Entity, Controller, Repository, and Service packages in your "src" folder;
+3) Create your Entity, Controller, Repository, and Service packages in your "src" folder;
 
 - Entity package add
 ```
@@ -240,6 +220,41 @@ public class UsersService {
 
 ```
 
+⬇️⬇️
+
+4) If you decide to use Spring Security, navigate to your "src" folder and create the class
+SecurityConfig.java and add
+```
+    package com.Spring_API.demo.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/**").permitAll()
+                )
+                .csrf(AbstractHttpConfigurer::disable);
+        return http.build();
+    }
+
+}
+
+```
+
+
+The SecurityFilterChain bean defines which URL paths should be secured and which should not. Specifically, the paths are configured to not require any authentication. All other paths must be authenticated.
+
 
 Have you encountered errors like 😫😮‍💨 ?;
 ```
@@ -280,4 +295,4 @@ cd Springboot-API-PostgresSQL
 ```
 - Alternatively, you can build the JAR file by using "./gradlew build" and then run the JAR file, as follows:
 
-## Follow all the above steps carefully and Thank me later!🥳
+## Congratulation you just created your first API !🥳
