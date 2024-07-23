@@ -5,6 +5,7 @@ pipeline {
         DATABASE_URL = "jdbc:postgresql://postgres_db:5432/demo"
     }
 
+    stages {
         stage('Build') {
             steps {
                 script {
@@ -22,4 +23,3 @@ pipeline {
         }
     }
 }
-
